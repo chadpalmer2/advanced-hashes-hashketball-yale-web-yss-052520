@@ -1,3 +1,5 @@
+require 'pry'
+
 # Write your code below game_hash
 def game_hash
   {
@@ -126,4 +128,74 @@ def game_hash
   }
 end
 
-# Write code here
+def num_points_scored(name)
+  game_hash.each do |team, dict|
+    dict[:players].each do |player|
+      if player[:player_name] == name
+        return player[:points]
+      end
+    end
+  end
+end
+
+def shoe_size(name)
+  game_hash.each do |team, dict|
+    dict[:players].each do |player|
+      if player[:player_name] == name
+        return player[:shoe]
+      end
+    end
+  end
+end
+
+def team_colors(name)
+  game_hash.each do |team, dict|
+    if dict[:team_name] == name
+      return dict[:colors]
+    end
+  end
+end
+
+def team_names
+  game_hash.each_with_object([]) do |(team, dict), array|
+    array.push(dict[:team_name])
+  end
+end
+
+def player_numbers(name)
+  game_hash.each do |team, dict|
+    if dict[:team_name] == name
+      return dict[:players].each_with_object([]) do |player, array|
+        array.push(player[:number])
+      end
+    end
+  end
+end
+
+def player_stats(name)
+  game_hash.each do |team, dict|
+    dict[:players].each do |player|
+      if player[:player_name] == name
+        return player.reject { |key, value| key == name }
+      end
+    end
+  end
+end
+
+def big_shoe_rebounds
+  largest_home = game_hash[:home][:players].reduce do |max, player|
+    max[:shoe] < player[:shoe] ? player : max
+  end
+  largest_away = game_hash[:away][:players].reduce do |max, player|
+    max[:shoe] < player[:shoe] ? player : max
+  end
+  largest = largest_home[:shoe] > largest_away[:shoe] ? largest_home[:player_name] : largest_away[:player_name]
+  
+  game_hash.each do |team, dict|
+    dict[:players].each do |player|
+      if player[:player_name] == largest
+        return player[:rebounds]
+      end
+    end
+  end
+end
