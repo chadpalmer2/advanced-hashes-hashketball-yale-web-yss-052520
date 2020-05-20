@@ -166,6 +166,7 @@ end
 
 def player_stats(name)
   player_match = all_players.find { |player| player[:name] == name }
+  binding.pry
   player_match.reject { |key, value| key == name }
 end
 
