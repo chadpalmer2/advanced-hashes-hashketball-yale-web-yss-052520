@@ -1,4 +1,3 @@
-# Write your code below game_hash
 def game_hash
   {
     home: {
@@ -126,62 +125,48 @@ def game_hash
   }
 end
 
-def num_points_scored(name)
-  game_hash.each do |team, dict|
-    dict[:players].each do |player|
-      if player[:player_name] == name
-        return player[:points]
-      end
-    end
+# Helper functions
+
+def all_players
+  game_hash[:home][:players].concat(game_hash[:away][:players])
+end
+
+def choose_team(name)
+  if name == "Brooklyn Nets"
+    game_hash[:home]
+  else
+    game_hash[:away]
   end
+end
+
+# Deliverable functions
+
+def num_points_scored(name)
+  player_stats(name)[:points]
 end
 
 def shoe_size(name)
-  game_hash.each do |team, dict|
-    dict[:players].each do |player|
-      if player[:player_name] == name
-        return player[:shoe]
-      end
-    end
-  end
+  player_stats(name)[:shoe]
 end
 
 def team_colors(name)
-  game_hash.each do |team, dict|
-    if dict[:team_name] == name
-      return dict[:colors]
-    end
-  end
+  choose_team(name)[:colors]
 end
 
 def team_names
-  game_hash.each_with_object([]) do |(team, dict), array|
-    array.push(dict[:team_name])
-  end
+  game_hash.each_with_object([]) { |(team, dict), array| array.push(dict[:team_name]) }
 end
 
 def player_numbers(name)
-  game_hash.each do |team, dict|
-    if dict[:team_name] == name
-      return dict[:players].each_with_object([]) do |player, array|
-        array.push(player[:number])
-      end
-    end
-  end
+  choose_team(name)[:players].each_with_object([]) { |player, array|
+        array.push(player[:number]) }
 end
 
 def player_stats(name)
-  game_hash.each do |team, dict|
-    dict[:players].each do |player|
-      if player[:player_name] == name
-        return player.reject { |key, value| key == name }
-      end
-    end
-  end
+  player_match = all_players.find { |player| player[:player_name] == name }
+  player_match.reject { |key, value| key == name }
 end
 
 def big_shoe_rebounds
-  players = game_hash[:home][:players].concat(game_hash[:away][:players])
-  
-  players.reduce { |max, player| max[:shoe] < player[:shoe] ? player : max }[:rebounds]
+  all_players.reduce { |max, player| max[:shoe] < player[:shoe] ? player : max }[:rebounds]
 end
