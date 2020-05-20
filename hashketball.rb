@@ -181,19 +181,7 @@ def player_stats(name)
 end
 
 def big_shoe_rebounds
-  largest_home = game_hash[:home][:players].reduce do |max, player|
-    max[:shoe] < player[:shoe] ? player : max
-  end
-  largest_away = game_hash[:away][:players].reduce do |max, player|
-    max[:shoe] < player[:shoe] ? player : max
-  end
-  largest = largest_home[:shoe] > largest_away[:shoe] ? largest_home[:player_name] : largest_away[:player_name]
+  players = game_hash[:home][:players].concat(game_hash[:away][:players])
   
-  game_hash.each do |team, dict|
-    dict[:players].each do |player|
-      if player[:player_name] == largest
-        return player[:rebounds]
-      end
-    end
-  end
+  players.reduce { |max, player| max[:shoe] < player[:shoe] ? player : max }[:rebounds]
 end

@@ -1,4 +1,4 @@
-e# Hashketball
+# Hashketball
 
 ## Learning Goals
 
