@@ -126,6 +126,10 @@ def game_hash
   }
 end
 
+###
+
+all_players = game_hash[:home][:players].concat(game_hash[:away][:players])
+
 def num_points_scored(name)
   player_stats(name)[:points]
 end
@@ -159,17 +163,10 @@ def player_numbers(name)
 end
 
 def player_stats(name)
-  game_hash.each do |team, dict|
-    dict[:players].each do |player|
-      if player[:player_name] == name
-        return player.reject { |key, value| key == name }
-      end
-    end
-  end
+  player_match = all_players.find { |player| player[:name] == name }
+  player_match.reject { |key, value| key == name }
 end
 
 def big_shoe_rebounds
-  players = game_hash[:home][:players].concat(game_hash[:away][:players])
-  
-  players.reduce { |max, player| max[:shoe] < player[:shoe] ? player : max }[:rebounds]
+  all_players.reduce { |max, player| max[:shoe] < player[:shoe] ? player : max }[:rebounds]
 end
