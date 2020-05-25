@@ -163,8 +163,7 @@ def player_numbers(name)
 end
 
 def player_stats(name)
-  player_match = all_players.find { |player| player[:player_name] == name }
-  player_match.reject { |key, value| key == name }
+  all_players.find { |player| player[:player_name] == name }
 end
 
 def big_shoe_rebounds
